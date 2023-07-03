@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mapas/screens/gps_access_screen.dart';
@@ -12,6 +14,7 @@ class LoadingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<GpsBloc, GpsState>(
       builder: (context, state) {
+        log(state.toString());
         if (state.isAllGranted) {
           return const MapScreen();
         }
