@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -49,7 +47,7 @@ class _MapScreenState extends State<MapScreen> {
                       initialLocaltion: locationState.lastKnownLocation!,
                       polylines: mapState.polylines.values.toSet(),
                     ),
-                    const SearchBar()
+                    const SearchBarWidget()
                   ],
                 ),
               );
@@ -58,9 +56,9 @@ class _MapScreenState extends State<MapScreen> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: Column(
+      floatingActionButton: const Column(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: const [
+        children: [
           BtnFollowUser(),
           BtnCurrentLocation(),
           BtnShowPolyline(),
