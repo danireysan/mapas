@@ -1,6 +1,6 @@
-export 'package:mapas/widgets/manual_marker.dart';
-
 export 'package:mapas/widgets/searchbar.dart';
+
+export 'package:mapas/widgets/manual_marker.dart';
 
 export 'package:mapas/widgets/btn_show_polyline.dart';
 

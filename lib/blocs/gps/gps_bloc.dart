@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -47,11 +46,10 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
 
     _gpsStatusSubscription =
         geo.Geolocator.getServiceStatusStream().listen((event) {
-      log("Service status: ${event.toString()}", name: 'GpsBloc');
       final isEnabled = event == geo.ServiceStatus.enabled;
       add(GpsAndPermissionEvent(
         isGpsEnabled: isEnabled,
-        isPermissionGranted: true,
+        isPermissionGranted: state.isPermissionGranted,
       ));
     });
 
