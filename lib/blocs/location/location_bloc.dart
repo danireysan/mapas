@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -14,7 +13,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
 
   LocationBloc() : super(LocationState.initialState()) {
     on<OnStartFollowingUserEvent>((event, emit) {
-      log(" I was triggered");
       emit(state.copyWith(followingUser: true));
     });
     on<OnStopFollowingEvent>(
