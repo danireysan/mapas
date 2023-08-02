@@ -2,7 +2,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../blocs/bloc/search_bloc.dart';
+import '../blocs/blocs.dart';
+import '../helpers/show_loading_message.dart';
 
 class ManualMarker extends StatelessWidget {
   const ManualMarker({super.key});
@@ -26,6 +27,7 @@ class _ManualMarkerBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return SizedBox(
       width: size.width,
       height: size.height,
@@ -66,6 +68,9 @@ class _ConfirmButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final searchBloc = BlocProvider.of<SearchBloc>(context);
+    final locationBloc = BlocProvider.of<LocationBloc>(context);
+    final mapBloc = BlocProvider.of<MapBloc>(context);
     return FadeInUp(
       from: 100,
       duration: const Duration(milliseconds: 300),
@@ -75,14 +80,27 @@ class _ConfirmButton extends StatelessWidget {
         shape: const StadiumBorder(),
         minWidth: size.width - 120,
         child: const Text(
-          'Confirmar',
+          'Confirmar destino',
           style: TextStyle(
             color: Colors.white,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
-        onPressed: () {},
+        onPressed: () async {
+          final start = locationBloc.state.lastKnownLocation;
+          final end = mapBloc.centralLocation;
+          if (start == null || end == null) return;
+
+          showLoadingMessage(context);
+          final destination = await searchBloc.getCordsStartToEnd(start, end);
+          mapBloc.drawRoutePolyline(destination);
+
+          searchBloc.add(DeactivateManualMarkerEvent());
+
+          // ignore: use_build_context_synchronously
+          Navigator.of(context).pop();
+        },
       ),
     );
   }
@@ -101,7 +119,8 @@ class _BackBtn extends StatelessWidget {
         backgroundColor: Colors.white,
         child: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () =>
+              context.read<SearchBloc>().add(DeactivateManualMarkerEvent()),
         ),
       ),
     );
